@@ -26,6 +26,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const paintingCollection = client.db("paintingDB").collection("painting");
+    const usersCollection = client.db("paintingDB").collection("users");
     
     app.get('/painting', async(req,res)=>{
         const cursor = paintingCollection.find();
@@ -40,8 +41,14 @@ async function run() {
     })
 
     app.post('/painting',async(req,res)=>{
+        const painting = req.body;
+        console.log('new user', painting);
+        const result = await paintingCollection.insertOne(painting);
+        res.send(result)
+    })
+    app.post('/users',async(req,res)=>{
         const user = req.body;
-        console.log('new user', user);
+        console.log('newUser of userDB', user);
         const result = await paintingCollection.insertOne(user);
         res.send(result)
     })
