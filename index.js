@@ -24,7 +24,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     const paintingCollection = client.db("paintingDB").collection("painting");
     const subcategoryCollection = client.db("paintingDB").collection("subcategory");
     
@@ -33,7 +33,7 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
-    app.get('/subcategory', async(req,res)=>{
+    app.get('/git', async(req,res)=>{
         const cursor = subcategoryCollection.find();
         const result = await cursor.toArray();
         res.send(result);
