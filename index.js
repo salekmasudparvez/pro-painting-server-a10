@@ -10,7 +10,7 @@ app.use(express.json())
 
 
 
-const uri = "mongodb+srv://smparvez:smp113154@cluster0.2gfcy7h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = `mongodb+srv://${process.env.UserDB}:${process.env.PassDB}@cluster0.2gfcy7h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -26,10 +26,15 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const paintingCollection = client.db("paintingDB").collection("painting");
-    const usersCollection = client.db("paintingDB").collection("users");
+    const subcategoryCollection = client.db("paintingDB").collection("subcategory");
     
     app.get('/painting', async(req,res)=>{
         const cursor = paintingCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+    app.get('/subcategory', async(req,res)=>{
+        const cursor = subcategoryCollection.find();
         const result = await cursor.toArray();
         res.send(result);
     })
@@ -46,12 +51,7 @@ async function run() {
         const result = await paintingCollection.insertOne(painting);
         res.send(result)
     })
-    app.post('/users',async(req,res)=>{
-        const user = req.body;
-        console.log('newUser of userDB', user);
-        const result = await paintingCollection.insertOne(user);
-        res.send(result)
-    })
+   
     app.put('/painting/:id', async(req,res)=>{
         const id = req.params.id;
         const updateCard = req.body;
