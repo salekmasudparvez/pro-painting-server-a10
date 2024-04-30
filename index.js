@@ -29,6 +29,7 @@ async function run() {
     // await client.connect();
     const paintingCollection = client.db("paintingDB").collection("painting");
     const subcategoryCollection = client.db("paintingDB").collection("subcategory");
+    const themeCollection = client.db("paintingDB").collection("theme");
     
     app.get('/painting', async(req,res)=>{
         const cursor = paintingCollection.find();
@@ -37,6 +38,11 @@ async function run() {
     })
     app.get('/subcategory', async(req,res)=>{
         const cursor = subcategoryCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+    app.get('/theme', async(req,res)=>{
+        const cursor = themeCollection.find();
         const result = await cursor.toArray();
         res.send(result);
     })
