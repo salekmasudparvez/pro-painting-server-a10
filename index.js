@@ -29,7 +29,6 @@ async function run() {
     const subcategoryCollection = client
       .db("paintingDB")
       .collection("subcategory");
-    const themeCollection = client.db("paintingDB").collection("theme");
 
     app.get("/painting", async (req, res) => {
       const cursor = paintingCollection.find();
@@ -41,11 +40,7 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-    app.get("/theme", async (req, res) => {
-      const cursor = themeCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
-    });
+
     app.get("/painting/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -58,12 +53,6 @@ async function run() {
       const user = await subcategoryCollection.findOne(query);
       res.send(user);
     });
-    app.get("/theme/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const user = await themeCollection.findOne(query);
-      res.send(user);
-    });
 
     app.post("/painting", async (req, res) => {
       const painting = req.body;
@@ -72,32 +61,6 @@ async function run() {
       res.send(result);
     });
 
-    app.put("/painting/:id", async (req, res) => {
-      const id = req.params.id;
-      const updateCard = req.body;
-      const filter = { _id: new ObjectId(id) };
-      const options = { upsert: true };
-      const updatedPaintCard = {
-        $set: {
-          image: updateCard.image,
-          item_name: updateCard.item_name,
-          subcategory_Name: updateCard.subcategory_Name,
-          short_description: updateCard.short_description,
-          Price: updateCard.Price,
-          rating: updateCard.rating,
-          customization: updateCard.customization,
-          processing_time: updateCard.processing_time,
-          stockStatus: updateCard.stockStatus,
-        },
-      };
-      const result = await paintingCollection.updateOne(
-        filter,
-        updatedPaintCard,
-        options
-      );
-      res.send(result);
-      console.log(result);
-    });
     app.put("/painting/:id", async (req, res) => {
       const id = req.params.id;
       const updateCard = req.body;
